@@ -7,7 +7,30 @@ public class EDITOR {
     private static enum MODE{FILE_SELECTION, FILE_EDITING, RUNNING, FILE_SAVING}
     private static MODE currentMode = MODE.FILE_SELECTION;
     private static int pointer = 0;
+    private static int pointer2 = 0;
     private static String file;
+    public static double timeout = 1;
+    public static boolean parallel, perpetual = false;
+    public static boolean timeoutIncluded = true;
+
+    public static boolean ClawTiltAction = true;
+    public static boolean usingBackboard = false;
+    public static boolean isBackboard = true;
+    public static double tilt = 3;
+
+    public static boolean LiftAction = false;
+    public static int liftTo = 0;
+    public static double liftPower = 0;
+
+    public static boolean ClawOpenAction = false;
+    public static boolean topOpen, bottomOpen = false;
+
+    public static boolean MvntAction = false;
+    public static double x, y, rot, maxPower;
+    public static boolean maxPowerIncluded = false;
+
+
+
 
     public static void main(String[] args) throws IOException {
         BufferedReader SystemReader = new BufferedReader(new InputStreamReader(System.in));
@@ -89,17 +112,63 @@ public class EDITOR {
                 if(currentMode == MODE.FILE_EDITING)
                 {
                     BufferedReader br = new BufferedReader(new FileReader(file));
+
                     if(writeRequested)
                     {
-                        String newLine = SystemReader.readLine();
-                        if(!newLine.equals("CANCEL"))
+                        StringBuilder sb = new StringBuilder();
+                        if(timeoutIncluded)
                         {
-                            fileLines.set(pointer, newLine);
+                            sb.append(timeout).append(" ").append(parallel).append(" ").append(perpetual).append(" !! ");
+                        }
+                        else
+                        {
+                            sb.append(parallel).append(" ").append(perpetual).append(" !! ");
+                        }
+                        if(ClawTiltAction)
+                        {
+                            sb.append(" CTA ");
+                            if(usingBackboard)
+                            {
+                                sb.append(" ").append(isBackboard);
+                            }
+                            else
+                            {
+                                sb.append(" ").append(tilt);
+                            }
+                        }
+                        else if(ClawOpenAction)
+                        {
+                            sb.append("COA").append(" ").append(topOpen).append(" ").append(bottomOpen);
+                        }
+                        else if(LiftAction)
+                        {
+                            sb.append("LA").append(" ").append(liftTo).append(" ").append(liftPower);
+                        }
+                        else if(MvntAction)
+                        {
+
+                            sb.append("MA").append(" ").append(x).append(" ").append(y).append(" ").append(rot);
+                            if(maxPowerIncluded)
+                            {
+                                sb.append(" ").append(maxPower);
+                            }
+                        }
+                        System.out.println("LINE TO BE ADDED: " + sb);
+                        System.out.println("CONFIRM WITH Y");
+
+                        String newLine = SystemReader.readLine();
+                        if(newLine.charAt(0)=='y')
+                        {
+                            fileLines.set(pointer, sb.toString());
                             if(pointer == fileLines.size()-1)
                             {
                                 pointer = fileLines.size();
                                 fileLines.add("");
                             }
+                        }
+                        else
+                        {
+                            System.out.println("CANCELED");
                         }
                         writeRequested = false;
                     }
