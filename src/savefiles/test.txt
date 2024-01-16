@@ -1,0 +1,25 @@
+//Formatting
+
+[OPTIONAL TIMEOUT] [OPTIONAL PARALLEL] [OPTIONAL PERPETUAL] !! [ACTION FORMAT]
+
+
+//Claw Action
+--> Tilt Action:
+CTA [tilt boolean OR tilt double]
+CTA true
+CTA 1.0
+
+--> Open/Close Action:
+COA [top open] [bottom open]
+COA true true --> both open
+COA true false --> bottom close, top open
+
+
+//Lift Action
+LA [height] [power]
+LA 2000 1.0
+
+//Mvmt Action
+MA [Pose2D X] [Pose2D Y] [Pose2D RotationDeg] [OPTIONAL maxPower]
+MA 1 2 3
+MA 1 2 3 0.8
